@@ -9,6 +9,7 @@
 #define LIBS_TMC5160_STM32_HAL_TMC5160_STM32_HAL_H_
 
 
+
 // Registers
 typedef enum{
 	// GENERAL CONFIGURATION REGISTERS (0X00…0X0F)
@@ -69,6 +70,17 @@ typedef enum{
 	PWM_AUTO		= 0x72, // R
 	LOST_STEPS		= 0x73, // R
 }TMC5160_Regs;
+
+// Structs
+typedef struct{
+		SPI_HandleTypeDef        *spi;
+		GPIO_TypeDef           *GPIOx;
+		uint16_t				   CS;
+}TMS5160_HandleTypeDef;
+
+// Prototipes Functions
+HAL_StatusTypeDef TMC5160_WriteRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs reg_addr, uint8_t data[]);
+HAL_StatusTypeDef TMC5160_ReadRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs reg_addr, uint8_t data[]);
 
 
 #endif /* LIBS_TMC5160_STM32_HAL_TMC5160_STM32_HAL_H_ */
