@@ -42,7 +42,7 @@ HAL_StatusTypeDef TMC5160_ReadRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs
 	  buff[3] = data[2];
 	  buff[4] = data[3];
 
-	  HAL_StatusTypeDef result = HAL_SPI_TransmitRecieve(htmc->_hspi, buff,data, 5, 100);
+	  HAL_StatusTypeDef result = HAL_SPI_TransmitRecieve(htmc->_hspi, buff, data, 5, 100);
 	  HAL_GPIO_WritePin(htmc->GPIOx,htmc->CS, GPIO_PIN_SET);
 	  return result;
 }
