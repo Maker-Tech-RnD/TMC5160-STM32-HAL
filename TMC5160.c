@@ -103,37 +103,36 @@ HAL_StatusTypeDef TMC5160_Configuration(TMC5160_HandleTypeDef *htmc){
 
 
 // Drive functions
-HAL_StatusTypeDef TMC5160_setFirstAcceleration(TMC5160_HandleTypeDef *htmc, uint16_t value){
+HAL_StatusTypeDef TMC5160_setFirstAcceleration(TMC5160_HandleTypeDef *htmc, uint32_t value){
 if((value > TMC5160_FIRST_ACCELERATION_LIMIT) || (value < 0) ){
 		return HAL_ERROR;
 	}
-	divide_uint32_t(value, htmc->first_acceleration);
+    htmc->first_acceleration = value;
 	return HAL_OK;
 }
 
 
-HAL_StatusTypeDef TMC5160_setMaxAcceleration(TMC5160_HandleTypeDef *htmc, uint16_t value){
+HAL_StatusTypeDef TMC5160_setMaxAcceleration(TMC5160_HandleTypeDef *htmc, uint32_t value){
   if((value > TMC5160_MAX_ACCELERATION_LIMIT) || (value < 0) ){
 		return HAL_ERROR;
 	}
-
-	divide_uint32_t(value, htmc->max_acceleration );
+    htmc->max_acceleration = value;
 	return HAL_OK;
 }
 //
-HAL_StatusTypeDef TMC5160_setMaxDeceleration(TMC5160_HandleTypeDef *htmc, uint16_t value){
+HAL_StatusTypeDef TMC5160_setMaxDeceleration(TMC5160_HandleTypeDef *htmc, uint32_t value){
   if((value > TMC5160_MAX_DECELERATION_LIMIT) || (value < 0) ){
 		return HAL_ERROR;
 	}
-	divide_uint32_t(value, htmc->max_deceleration  );
+    htmc->max_deceleration = value;
 	return HAL_OK;
 }
 
-HAL_StatusTypeDef TMC5160_setSecondDeceleration(TMC5160_HandleTypeDef *htmc, uint16_t value){
+HAL_StatusTypeDef TMC5160_setSecondDeceleration(TMC5160_HandleTypeDef *htmc, uint32_t value){
   if((value > TMC5160_SECOND_DECELERATION_LIMIT) || (value < 0) ){
 		return HAL_ERROR;
 	}
-	divide_uint32_t(value, htmc->second_deceleration);
+    htmc->second_deceleration = value;
 	return HAL_OK;
 }
 
@@ -141,7 +140,7 @@ HAL_StatusTypeDef TMC5160_setStopVelocity(TMC5160_HandleTypeDef *htmc, uint32_t 
   if((value > TMC5160_STOP_VELOCITY_LIMIT) || (value < 0) ){
 		return HAL_ERROR;
 	}
-	divide_uint32_t(value, htmc->stop_speed);
+    htmc->stop_speed = value;
 	return HAL_OK;
 }
 
@@ -149,7 +148,7 @@ HAL_StatusTypeDef TMC5160_setFirstVelocity(TMC5160_HandleTypeDef *htmc, uint32_t
   if((value > TMC5160_FIRST_VELOCITY_LIMIT) || (value < 0) ){
 		return HAL_ERROR;
 	}
-	divide_uint32_t(value, htmc->first_speed);
+  	htmc->first_speed = value;
 	return HAL_OK;
 }
 
@@ -157,14 +156,15 @@ HAL_StatusTypeDef TMC5160_setMaxVelocity(TMC5160_HandleTypeDef *htmc, uint32_t v
   if((value > TMC5160_MAX_VELOCITY_LIMIT) || (value < 0) ){
 		return HAL_ERROR;
 	}
-	divide_uint32_t(value, htmc->max_speed);
+    htmc->max_speed = value;
 	return HAL_OK;
 }
 
 HAL_StatusTypeDef TMC5160_setRampMode(TMC5160_HandleTypeDef *htmc, RampModes mode){
- 	divide_uint32_t(mode, htmc->ramp_mode);
+	htmc->ramp_mode = mode;
 	return HAL_OK;
 }
+
 // Configuration Drive
 HAL_StatusTypeDef TMC5160_Configuration_Drive(TMC5160_HandleTypeDef *htmc){
 	TMC5160_setFirstAcceleration(htmc,1000);
@@ -188,7 +188,7 @@ HAL_StatusTypeDef TMC5160_default_init(TMC5160_HandleTypeDef *htmc){
 	result = TMC5160_Configuration(htmc);
 	if(result != HAL_OK){
 			return result;
-		}
+		    }
 	result = TMC5160_WriteRegister(htmc, A1, htmc->first_acceleration);
 	if(result != HAL_OK){
 				return result;
