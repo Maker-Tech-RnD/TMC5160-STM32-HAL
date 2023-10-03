@@ -11,13 +11,12 @@ void  divide_uint32_t_and_pacckage_in_array(uint32_t value, uint8_t *data){
 uint32_t parsing_data( uint8_t data[]) {
 
     // Init parts of the message
-    uint32_t third_byte = (uint32_t)data[0] << 24;
-    uint32_t second_byte = (uint32_t)data[1] << 16;
-    uint32_t first_byte = (uint32_t)data[2] << 8;
-    uint32_t zero_byte = (uint32_t)data[3];
+    uint32_t third_byte = (uint32_t)data[1] << 24;
+    uint32_t second_byte = (uint32_t)data[2] << 16;
+    uint32_t first_byte = (uint32_t)data[3] << 8;
+    uint32_t zero_byte = (uint32_t)data[4];
     // Return
     return (zero_byte | first_byte | second_byte | third_byte);
-
 }
 
 // WRITE/READ
