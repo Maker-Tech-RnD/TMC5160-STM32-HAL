@@ -96,10 +96,37 @@ typedef enum  {
 
 // Struct
 typedef struct{
+			//Configuration Acceleration and velocity
+		uint8_t CHOPCONF[4];
+		uint8_t IHOLD_IRUN[4];
+		uint8_t DRV_STATUS[4];
+		uint8_t TPOWER_DOWN[4];
+		uint8_t TSTEP[4];
+		uint8_t TPWMTHRS[4];
+		uint8_t TCOOLTHRS[4];
+		uint8_t THIGH[4];
+		uint8_t GCONF[4];
+		uint8_t GLOBALSCALER[4];
+
+}TMC5160_RegisterOfConfiguration_HandleTypeDef;
+
+typedef struct{
+	//Configuration Acceleration and velocity
+		uint8_t max_speed[4];
+		uint8_t stop_speed[4];
+		uint8_t first_speed[4];
+		uint8_t first_acceleration[4];
+		uint8_t max_deceleration[4];
+		uint8_t second_deceleration[4];
+		uint8_t max_acceleration[4];
+		uint8_t ramp_mode[4];
+}TMC5160_ConfigurationOfVelosity_HandleTypeDef;
+
+typedef struct{
 		SPI_HandleTypeDef        *spi;
 		GPIO_TypeDef           *GPIOx;
 		uint16_t				   CS;
-
+		TMC5160_RegisterOfConfiguration_HandleTypeDef configuration;
 		//Configuration Acceleration and velocity
 		uint8_t max_speed[4];
 		uint8_t stop_speed[4];
@@ -129,4 +156,5 @@ HAL_StatusTypeDef TMC5160_setRampMode(TMC5160_HandleTypeDef *htmc, RampModes mod
 // Configuration Drive
 HAL_StatusTypeDef TMC5160_Configuration_Drive(TMC5160_HandleTypeDef *htmc);
 HAL_StatusTypeDef TMC5160_default_init(TMC5160_HandleTypeDef *htmc);
+
 #endif /* LIBS_TMC5160_STM32_HAL_TMC5160_STM32_HAL_H_ */

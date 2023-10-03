@@ -39,7 +39,7 @@ HAL_StatusTypeDef TMC5160_ReadRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs
 
 HAL_StatusTypeDef TMC5160_Configuration(TMC5160_HandleTypeDef *htmc){
 
-	uint8_t cmd_init[5][4]= {
+	uint8_t cmd_init[5][4] = {
 			{0x00, 0x01, 0x00, 0xC3},
 			{0x00, 0x06, 0x1F, 0x0A},
 			{0x00, 0x00, 0x00, 0x0A},
@@ -215,5 +215,57 @@ HAL_StatusTypeDef TMC5160_default_init(TMC5160_HandleTypeDef *htmc){
 				return result;
 			}
 	return HAL_OK;
+}
+
+
+// New config function
+// Drive functions
+HAL_StatusTypeDef TMC5160_Conguration(TMC5160_HandleTypeDef *htmc){
+
+	uint8_t cmd_init[5][4] = {
+			{0x00, 0x01, 0x00, 0xC3},
+			{0x00, 0x06, 0x1F, 0x0A},
+			{0x00, 0x00, 0x00, 0x0A},
+			{0x00, 0x00, 0x00, 0x04},
+			{0x00, 0x00, 0x01, 0xF4},
+	};
+
+	// Костыль, который отправляет первую посылку данных, так как первая  посылка с одного раза не отправляется
+	HAL_StatusTypeDef result = TMC5160_WriteRegister(htmc, CHOPCONF, cmd_init[0]);
+
+	if(result != HAL_OK){
+				return result;
+		}
+
+	result = TMC5160_WriteRegister(htmc, CHOPCONF, cmd_init[0]);
+
+	if(result != HAL_OK){
+			return result;
+	}
+
+	result = TMC5160_WriteRegister(htmc, IHOLD_IRUN, cmd_init[1]);
+
+	if(result != HAL_OK){
+				return result;
+	}
+
+	result = TMC5160_WriteRegister(htmc, TPOWERDOWN, cmd_init[2]);
+
+	if(result != HAL_OK){
+		return result;
+	}
+
+	result = TMC5160_WriteRegister(htmc, GCONF, cmd_init[3]);
+
+	if(result != HAL_OK){
+				return result;
+	}
+
+	result = TMC5160_WriteRegister(htmc,  TPWMTHRS, cmd_init[4]);
+
+	if(result != HAL_OK){
+				return result;
+	}
+	return result ;
 }
 
