@@ -97,29 +97,29 @@ typedef enum  {
 // Struct
 typedef struct{
 			//Configuration Acceleration and velocity
-		uint8_t CHOPCONF[4];
-		uint8_t IHOLD_IRUN[4];
-		uint8_t DRV_STATUS[4];
-		uint8_t TPOWER_DOWN[4];
-		uint8_t TSTEP[4];
-		uint8_t TPWMTHRS[4];
-		uint8_t TCOOLTHRS[4];
-		uint8_t THIGH[4];
-		uint8_t GCONF[4];
-		uint8_t GLOBALSCALER[4];
+		uint32_t CHOPCONF;
+		uint32_t IHOLD_IRUN;
+		uint32_t DRV_STATUS;
+		uint32_t TPOWER_DOWN;
+		uint32_t TSTEP;
+		uint32_t TPWMTHRS;
+		uint32_t TCOOLTHRS;
+		uint32_t THIGH;
+		uint32_t GCONF;
+		uint32_t GLOBALSCALER;
 
 }TMC5160_RegisterOfConfiguration_HandleTypeDef;
 
 typedef struct{
 	//Configuration Acceleration and velocity
-		uint8_t max_speed[4];
-		uint8_t stop_speed[4];
-		uint8_t first_speed[4];
-		uint8_t first_acceleration[4];
-		uint8_t max_deceleration[4];
-		uint8_t second_deceleration[4];
-		uint8_t max_acceleration[4];
-		uint8_t ramp_mode[4];
+		uint32_t max_speed;
+		uint32_t stop_speed;
+		uint32_t first_speed;
+		uint32_t first_acceleration;
+		uint32_t max_deceleration;
+		uint32_t second_deceleration;
+		uint32_t max_acceleration;
+		uint32_t ramp_mode;
 }TMC5160_ConfigurationOfVelosity_HandleTypeDef;
 
 typedef struct{
@@ -128,14 +128,7 @@ typedef struct{
 		uint16_t				   CS;
 		TMC5160_RegisterOfConfiguration_HandleTypeDef configuration;
 		//Configuration Acceleration and velocity
-		uint8_t max_speed[4];
-		uint8_t stop_speed[4];
-		uint8_t first_speed[4];
-		uint8_t first_acceleration[4];
-		uint8_t max_deceleration[4];
-		uint8_t second_deceleration[4];
-		uint8_t max_acceleration[4];
-		uint8_t ramp_mode[4];
+		TMC5160_ConfigurationOfVelosity_HandleTypeDef configuration_velosity;
 }TMC5160_HandleTypeDef;
 
 // Prototypes Functions
