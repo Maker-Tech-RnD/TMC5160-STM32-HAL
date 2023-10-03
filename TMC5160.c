@@ -1,7 +1,7 @@
 #include "TMC5160.h"
 
 // Transform data
-void  divide_uint32_t(uint32_t value, uint8_t *data){
+void  divide_uint32_t_and_pacckage_in_array(uint32_t value, uint8_t *data){
     data[1]  = (uint8_t)(value >> 24);
     data[2]  = (uint8_t)(value >> 16);
     data[3]  = (uint8_t)(value >> 8);
@@ -21,16 +21,12 @@ uint32_t parsing_data( uint8_t data[]) {
 }
 
 // WRITE/READ
-HAL_StatusTypeDef TMC5160_WriteRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs reg_addr, uint8_t data[]){
+HAL_StatusTypeDef TMC5160_WriteRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs reg_addr, uint32_t data_of_register){
 	  //reg_addr - т.к. это на write, первый бит -> 1
 	  reg_addr |= 0b10000000;
 	  uint8_t buff[5];
 	  buff[0] = reg_addr;
-	  buff[1] = data[0];
-	  buff[2] = data[1];
-	  buff[3] = data[2];
-	  buff[4] = data[3];
-
+	  divide_uint32_t_and_pacckage_in_array(data_of_register, buff);
 	  //Receive
 	  HAL_GPIO_WritePin(htmc->GPIOx,htmc->CS, GPIO_PIN_RESET);
 	  HAL_StatusTypeDef result = HAL_SPI_Transmit(htmc->spi, buff, 5, 100);
@@ -39,7 +35,6 @@ HAL_StatusTypeDef TMC5160_WriteRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Reg
 }
 
 HAL_StatusTypeDef TMC5160_ReadRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs reg_addr, uint8_t data[]){
-
 	  uint8_t buff[5];
 	  buff[0] = reg_addr;
 	  buff[1] = data[0];
