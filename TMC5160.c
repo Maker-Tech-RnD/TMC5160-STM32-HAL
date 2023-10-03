@@ -95,6 +95,17 @@ void  divide_uint32_t(uint32_t value, uint8_t *data){
     data[3]  = (uint8_t)(value >> 0);
 }
 
+uint32_t parsing_data( uint8_t data[]) {
+
+    // Init parts of the message
+    uint32_t third_byte = (uint32_t)data[0] << 24;
+    uint32_t second_byte = (uint32_t)data[1] << 16;
+    uint32_t first_byte = (uint32_t)data[2] << 8;
+    uint32_t zero_byte = (uint32_t)data[3];
+    // Return
+    return (zero_byte | first_byte | second_byte | third_byte);
+
+}
 // Drive functions
 HAL_StatusTypeDef TMC5160_setFirstAcceleration(TMC5160_HandleTypeDef *htmc, uint16_t value){
 if((value > TMC5160_FIRST_ACCELERATION_LIMIT) || (value < 0) ){
