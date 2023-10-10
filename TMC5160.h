@@ -137,6 +137,7 @@ typedef struct{
 HAL_StatusTypeDef TMC5160_WriteRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs reg_addr, uint32_t data_of_register);
 HAL_StatusTypeDef TMC5160_ReadRegister(TMC5160_HandleTypeDef *htmc, TMC5160_Regs reg_addr, uint32_t data_of_register);
 HAL_StatusTypeDef TMC5160_Configuration(TMC5160_HandleTypeDef *htmc);
+
 //Configuration  function of the Velocity and Acceleration
 HAL_StatusTypeDef TMC5160_setFirstAcceleration(TMC5160_HandleTypeDef *htmc, uint32_t value);
 HAL_StatusTypeDef TMC5160_setMaxAcceleration(TMC5160_HandleTypeDef *htmc, uint32_t value);
@@ -146,9 +147,35 @@ HAL_StatusTypeDef TMC5160_setStopVelocity(TMC5160_HandleTypeDef *htmc, uint32_t 
 HAL_StatusTypeDef TMC5160_setFirstVelocity(TMC5160_HandleTypeDef *htmc, uint32_t value);
 HAL_StatusTypeDef TMC5160_setMaxVelocity(TMC5160_HandleTypeDef *htmc, uint32_t value);
 HAL_StatusTypeDef TMC5160_setRampMode(TMC5160_HandleTypeDef *htmc, RampModes mode);
+
 //Configuration Drive of all function of the Velocity and Acceleration
 HAL_StatusTypeDef TMC5160_Configuration_Drive(TMC5160_HandleTypeDef *htmc);
+
 //All configuration of the example from DataSheet
 HAL_StatusTypeDef TMC5160_default_init(TMC5160_HandleTypeDef *htmc);
+
+// New configuration bits functions
+	// CHOPCONF
+HAL_StatusTypeDef TMC5160_Slow_decay(TMC5160_HandleTypeDef *htmc,uint32_t frequency, uint32_t frequency_clock, uint32_t persent_of_chopperCycle);
+HAL_StatusTypeDef TMC5160_Comparator_Blank_Time(TMC5160_HandleTypeDef *htmc, uint32_t TBL);
+HAL_StatusTypeDef TMC5160_Selection_Of_ChopperMode(TMC5160_HandleTypeDef *htmc, uint32_t chm);
+HAL_StatusTypeDef TMC5160_Increase_Passive_Decay(TMC5160_HandleTypeDef *htmc, uint32_t TPFD);
+HAL_StatusTypeDef TMC5160_Hysteresis_Start_Setting(TMC5160_HandleTypeDef *htmc, uint32_t HSTRT);
+HAL_StatusTypeDef TMC5160_Hysteresis_End_Setting(TMC5160_HandleTypeDef *htmc, uint32_t HEND);
+	// Вопрос с chm - второй режим не понятен
+HAL_StatusTypeDef TMC5160_Fast_Decay_Time_Setting_CHM1(TMC5160_HandleTypeDef *htmc, uint32_t TFD);
+HAL_StatusTypeDef TMC5160_Sine_Wave_Offset_CHM1(TMC5160_HandleTypeDef *htmc, uint32_t OFFSET);
+HAL_StatusTypeDef TMC5160_Fast_Decay_Mode_CHM1(TMC5160_HandleTypeDef *htmc, uint32_t disfdcc);
+	// IHOLD_IRUN
+HAL_StatusTypeDef TMC5160_Standstill_Current(TMC5160_HandleTypeDef *htmc, uint32_t IHOLD);
+HAL_StatusTypeDef TMC5160_Motor_Run_Current(TMC5160_HandleTypeDef *htmc, uint32_t IRUN);
+HAL_StatusTypeDef TMC5160_Smooth_Current_Reduction(TMC5160_HandleTypeDef *htmc, uint32_t IHOLDDELAY);
+HAL_StatusTypeDef TMC5160_Global_Scaling_Of_Motor_Current(TMC5160_HandleTypeDef *htmc, uint32_t GLOBALSCALER);
+	//Velocity Based Mode Control
+HAL_StatusTypeDef TMC5160_Flag_Indicates_Motor_Stand_Still (TMC5160_HandleTypeDef *htmc, uint32_t stst);
+HAL_StatusTypeDef TMC5160_Delay_Time_After_Standstill(TMC5160_HandleTypeDef *htmc, uint32_t TPOWER_DOWN);
+HAL_StatusTypeDef TMC5160_Upper_Velocity_For_StealthChop_Voltage_PWM_Mode(TMC5160_HandleTypeDef *htmc, uint32_t TPWMTHRS);
+HAL_StatusTypeDef TMC5160_Control_The_Lower_Velocity_Threshold_For_Operation_With_CoolStep_And_StallGuard(TMC5160_HandleTypeDef *htmc, uint32_t TCOOLTHRS);
+HAL_StatusTypeDef TMC5160_Control_The_upper_threshold_for_operation_with_CoolStep_and_StallGuard(TMC5160_HandleTypeDef *htmc, uint32_t THIGH);
 
 #endif /* LIBS_TMC5160_STM32_HAL_TMC5160_STM32_HAL_H_ */
