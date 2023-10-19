@@ -156,7 +156,7 @@ HAL_StatusTypeDef TMC5160_default_init(TMC5160_HandleTypeDef *htmc);
 
 // New configuration bits functions
 	// CHOPCONF
-HAL_StatusTypeDef TMC5160_Slow_decay(TMC5160_HandleTypeDef *htmc,uint32_t frequency, uint32_t frequency_clock, uint32_t persent_of_chopperCycle);
+HAL_StatusTypeDef TMC5160_Slow_decay(TMC5160_HandleTypeDef *htmc,uint32_t TOFF);
 HAL_StatusTypeDef TMC5160_Comparator_Blank_Time(TMC5160_HandleTypeDef *htmc, uint32_t TBL);
 HAL_StatusTypeDef TMC5160_Selection_Of_ChopperMode(TMC5160_HandleTypeDef *htmc, uint32_t chm);
 HAL_StatusTypeDef TMC5160_Increase_Passive_Decay(TMC5160_HandleTypeDef *htmc, uint32_t TPFD);
@@ -177,5 +177,14 @@ HAL_StatusTypeDef TMC5160_Delay_Time_After_Standstill(TMC5160_HandleTypeDef *htm
 HAL_StatusTypeDef TMC5160_Upper_Velocity_For_StealthChop_Voltage_PWM_Mode(TMC5160_HandleTypeDef *htmc, uint32_t TPWMTHRS);
 HAL_StatusTypeDef TMC5160_Control_The_Lower_Velocity_Threshold_For_Operation_With_CoolStep_And_StallGuard(TMC5160_HandleTypeDef *htmc, uint32_t TCOOLTHRS);
 HAL_StatusTypeDef TMC5160_Control_The_upper_threshold_for_operation_with_CoolStep_and_StallGuard(TMC5160_HandleTypeDef *htmc, uint32_t THIGH);
+HAL_StatusTypeDef TMC5160_Hysteresis_For_Step_Frequency_Comparison(TMC5160_HandleTypeDef *htmc, uint32_t small_hysteresis);
+HAL_StatusTypeDef TMC5160_High_Velocity_Fullstep_Selection(TMC5160_HandleTypeDef *htmc, uint32_t vhighfs);
+HAL_StatusTypeDef TMC5160_High_Velocity_Chopper_Mode(TMC5160_HandleTypeDef *htmc, uint32_t vhighchm);
+HAL_StatusTypeDef TMC5160_StealthChop_Voltage_PWM_Enable_Flag(TMC5160_HandleTypeDef *htmc, uint32_t en_pwm_mod);
+
+// New all configuration BITS TIME
+HAL_StatusTypeDef TMC5160_Bits_Configuration(TMC5160_HandleTypeDef *htmc);
+HAL_StatusTypeDef TMC5160_Configuration_Mode(TMC5160_HandleTypeDef *htmc);
+HAL_StatusTypeDef TMC5160_default_init_Bits_time(TMC5160_HandleTypeDef *htmc);
 
 #endif /* LIBS_TMC5160_STM32_HAL_TMC5160_STM32_HAL_H_ */
