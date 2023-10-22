@@ -116,7 +116,7 @@ HAL_StatusTypeDef TMC5160_setRampMode(TMC5160_HandleTypeDef *htmc, RampModes mod
 HAL_StatusTypeDef TMC5160_Slow_decay(TMC5160_HandleTypeDef *htmc, uint32_t TOFF){
 	// Sets the slow decay time (off time). This setting also limits the maximum chopper frequency.
 	//Setting this parameter to zero completely disables all  driver transistors and the motor can free-wheel.
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFFFFFF0;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~TOFF_Mask);
 	if(TOFF > 15 ){
 		return HAL_ERROR;
 	}
@@ -127,7 +127,7 @@ HAL_StatusTypeDef TMC5160_Slow_decay(TMC5160_HandleTypeDef *htmc, uint32_t TOFF)
 HAL_StatusTypeDef TMC5160_Comparator_Blank_Time(TMC5160_HandleTypeDef *htmc, uint32_t TBL){
 	//Set comparator blank time to 16, 24, 36 or 54 clocks
 	//Hint: %01 or %10 is recommended for most applications
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFFE7FFF;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~TBL_Mask);
 	if(TBL >3){
 		return HAL_ERROR;
 	}
@@ -138,7 +138,7 @@ HAL_StatusTypeDef TMC5160_Comparator_Blank_Time(TMC5160_HandleTypeDef *htmc, uin
 HAL_StatusTypeDef TMC5160_Selection_Of_ChopperMode(TMC5160_HandleTypeDef *htmc, uint32_t chm){
 	//0 SpreadCycle
 	//1 classic const. off time
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFFFBFFF;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~chm_Mask);
 	if((chm == 0) || (chm == 1)){
 		htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF | (chm << 14);
 		return HAL_OK;
@@ -150,7 +150,7 @@ HAL_StatusTypeDef TMC5160_Increase_Passive_Decay(TMC5160_HandleTypeDef *htmc, ui
 	//TPFD allows dampening of motor mid-range resonances.
 	//Passive fast decay time setting controls duration of the
 	//fast decay phase inserted after bridge polarity change NCLK= 128 * TPFD;
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFF0FFFFF;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~TPFD_Mask);
 	if(TPFD > 15){
 		return HAL_ERROR;
 	}
@@ -159,8 +159,8 @@ HAL_StatusTypeDef TMC5160_Increase_Passive_Decay(TMC5160_HandleTypeDef *htmc, ui
 }
 // Вопрос с chm - второй режим не понятен
 HAL_StatusTypeDef TMC5160_Hysteresis_Start_Setting(TMC5160_HandleTypeDef *htmc, uint32_t HSTRT){
-	uint32_t chm = htmc->configuration.CHOPCONF & 0x4000;
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF &0xFFFFF87F;
+	uint32_t chm = htmc->configuration.CHOPCONF & chm_Mask;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF &(~HSTRT_Mask);
 	if(HSTRT > 7){
 		return HAL_ERROR;
 	}
@@ -176,8 +176,8 @@ HAL_StatusTypeDef TMC5160_Hysteresis_Start_Setting(TMC5160_HandleTypeDef *htmc, 
 
 HAL_StatusTypeDef TMC5160_Hysteresis_End_Setting(TMC5160_HandleTypeDef *htmc, uint32_t HEND){
 	//HSTRT+HEND must be ≤16.
-	uint32_t chm = htmc->configuration.CHOPCONF & 0x4000;
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFFFF87F;
+	uint32_t chm = htmc->configuration.CHOPCONF & chm_Mask;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~HEND_Mask);
 	if(HEND > 15){
 		return HAL_ERROR;
 	}
@@ -190,8 +190,8 @@ HAL_StatusTypeDef TMC5160_Hysteresis_End_Setting(TMC5160_HandleTypeDef *htmc, ui
 
 HAL_StatusTypeDef TMC5160_Fast_Decay_Time_Setting_CHM1(TMC5160_HandleTypeDef *htmc, uint32_t TFD){
 	//Fast decay time setting. With CHM=1, these bits  control the portion of fast decay for each chopper cycle.
-	uint32_t chm = htmc->configuration.CHOPCONF & 0x4000;
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFFFF7FF;
+	uint32_t chm = htmc->configuration.CHOPCONF & chm_Mask;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~(TFD_Mask|fd3_Mask));
 	if(TFD > 15){
 		return HAL_ERROR;
 	}
@@ -205,8 +205,8 @@ HAL_StatusTypeDef TMC5160_Fast_Decay_Time_Setting_CHM1(TMC5160_HandleTypeDef *ht
 
 HAL_StatusTypeDef TMC5160_Sine_Wave_Offset_CHM1(TMC5160_HandleTypeDef *htmc, uint32_t OFFSET){
 	//With CHM=1, these bits control the sine wave offset. A positive offset corrects for zero crossing error.
-	uint32_t chm = htmc->configuration.CHOPCONF & 0x4000;
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFFFF87F;
+	uint32_t chm = htmc->configuration.CHOPCONF & chm_Mask;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~OFFSET_Mask);
 
 	if(OFFSET > 15){
 		return HAL_ERROR;
@@ -220,8 +220,8 @@ HAL_StatusTypeDef TMC5160_Sine_Wave_Offset_CHM1(TMC5160_HandleTypeDef *htmc, uin
 
 HAL_StatusTypeDef TMC5160_Fast_Decay_Mode_CHM1(TMC5160_HandleTypeDef *htmc, uint32_t disfdcc){
 	//With CHM=1, these bits control the sine wave offset. A positive offset corrects for zero crossing error.
-	uint32_t chm = htmc->configuration.CHOPCONF & 0x4000;
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFFFEFFF;
+	uint32_t chm = htmc->configuration.CHOPCONF & chm_Mask;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~disfdcc_Mask);
 	if(disfdcc > 1){
 		return HAL_ERROR;
 	}
@@ -238,7 +238,7 @@ HAL_StatusTypeDef TMC5160_Fast_Decay_Mode_CHM1(TMC5160_HandleTypeDef *htmc, uint
 
 // IHOLD_IRUN
 HAL_StatusTypeDef TMC5160_Standstill_Current(TMC5160_HandleTypeDef *htmc, uint32_t IHOLD){\
-	htmc->configuration.IHOLD_IRUN = htmc->configuration.IHOLD_IRUN & 0xFFFFFFE0;
+	htmc->configuration.IHOLD_IRUN = htmc->configuration.IHOLD_IRUN & (~IHOLD_Mask);
 	if(IHOLD > 31){
 		return HAL_ERROR;
 	}
@@ -247,7 +247,7 @@ HAL_StatusTypeDef TMC5160_Standstill_Current(TMC5160_HandleTypeDef *htmc, uint32
 }
 
 HAL_StatusTypeDef TMC5160_Motor_Run_Current(TMC5160_HandleTypeDef *htmc, uint32_t IRUN){
-	htmc->configuration.IHOLD_IRUN = htmc->configuration.IHOLD_IRUN & 0xFFFFE0FF;
+	htmc->configuration.IHOLD_IRUN = htmc->configuration.IHOLD_IRUN & (~IRUN_Mask);
 	if( IRUN > 31){
 		return HAL_ERROR;
 	}
@@ -256,7 +256,7 @@ HAL_StatusTypeDef TMC5160_Motor_Run_Current(TMC5160_HandleTypeDef *htmc, uint32_
 }
 
 HAL_StatusTypeDef TMC5160_Smooth_Current_Reduction(TMC5160_HandleTypeDef *htmc, uint32_t IHOLDDELAY){
-	htmc->configuration.IHOLD_IRUN = htmc->configuration.IHOLD_IRUN & 0xFFF0FFFF;
+	htmc->configuration.IHOLD_IRUN = htmc->configuration.IHOLD_IRUN & (~IHOLDDELAY_Mask);
 	if(IHOLDDELAY > 15){
 		return HAL_ERROR;
 	}
@@ -279,7 +279,7 @@ HAL_StatusTypeDef TMC5160_Global_Scaling_Of_Motor_Current(TMC5160_HandleTypeDef 
 
 //Velocity Based Mode Control
 HAL_StatusTypeDef TMC5160_Flag_Indicates_Motor_Stand_Still (TMC5160_HandleTypeDef *htmc, uint32_t stst){
-	htmc->configuration.DRV_STATUS = htmc->configuration.DRV_STATUS & 0x7FFFFFFF;
+	htmc->configuration.DRV_STATUS = htmc->configuration.DRV_STATUS & (~stst_Mask);
 	if(stst > 1){
 		return HAL_ERROR;
 	}
@@ -330,7 +330,7 @@ HAL_StatusTypeDef TMC5160_Control_The_upper_threshold_for_operation_with_CoolSte
 }
 
 HAL_StatusTypeDef TMC5160_Hysteresis_For_Step_Frequency_Comparison(TMC5160_HandleTypeDef *htmc, uint32_t small_hysteresis){
-	htmc->configuration.GCONF = htmc->configuration.GCONF & 0xFFFFBFFF;
+	htmc->configuration.GCONF = htmc->configuration.GCONF & (~small_hysteresis_Mask);
 	if( small_hysteresis > 1){
 		return HAL_ERROR;
 	}
@@ -339,7 +339,7 @@ HAL_StatusTypeDef TMC5160_Hysteresis_For_Step_Frequency_Comparison(TMC5160_Handl
 }
 
 HAL_StatusTypeDef TMC5160_High_Velocity_Fullstep_Selection(TMC5160_HandleTypeDef *htmc, uint32_t vhighfs){
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFFBFFFF;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~vhighfs);
 	if( vhighfs > 1){
 		return HAL_ERROR;
 	}
@@ -348,7 +348,7 @@ HAL_StatusTypeDef TMC5160_High_Velocity_Fullstep_Selection(TMC5160_HandleTypeDef
 }
 
 HAL_StatusTypeDef TMC5160_High_Velocity_Chopper_Mode(TMC5160_HandleTypeDef *htmc, uint32_t vhighchm){
-	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & 0xFFF7FFFF;
+	htmc->configuration.CHOPCONF = htmc->configuration.CHOPCONF & (~vhighchm_Mask);
 	if( vhighchm > 1){
 		return HAL_ERROR;
 	}
@@ -356,12 +356,12 @@ HAL_StatusTypeDef TMC5160_High_Velocity_Chopper_Mode(TMC5160_HandleTypeDef *htmc
 	return HAL_OK;
 }
 
-HAL_StatusTypeDef TMC5160_StealthChop_Voltage_PWM_Enable_Flag(TMC5160_HandleTypeDef *htmc, uint32_t en_pwm_mod){
-	htmc->configuration.GCONF = htmc->configuration.GCONF & 0xFFFFFFFB;
-	if( en_pwm_mod > 1){
+HAL_StatusTypeDef TMC5160_StealthChop_Voltage_PWM_Enable_Flag(TMC5160_HandleTypeDef *htmc, uint32_t en_pwm_mode){
+	htmc->configuration.GCONF = htmc->configuration.GCONF & (~en_pwm_mode_Mask);
+	if( en_pwm_mode > 1){
 		return HAL_ERROR;
 	}
-	htmc->configuration.GCONF = htmc->configuration.GCONF | (en_pwm_mod << 2);
+	htmc->configuration.GCONF = htmc->configuration.GCONF | (en_pwm_mode << 2);
 	return HAL_OK;
 }
 
@@ -532,12 +532,9 @@ HAL_StatusTypeDef TMC5160_default_init_Bits_time(TMC5160_HandleTypeDef *htmc){
 
 
 //Coнfiguratioн
-/*HAL_StatusTypeDef TMC5160_SpreadCycle_Configuration(TMC5160_HandleTypeDef *htmc){
-	uint32_t frequency=0;
-	uint32_t frequency_clock=0;
-	uint32_t persent_of_chopperCycle=0;
+HAL_StatusTypeDef TMC5160_SpreadCycle_Configuration(TMC5160_HandleTypeDef *htmc){
 	TMC5160_StealthChop_Voltage_PWM_Enable_Flag(htmc, 0);
-	TMC5160_Slow_decay(htmc,frequency, frequency_clock, persent_of_chopperCycle);//TOFF=5,TL=20=;HSTART=0=HED
+	TMC5160_Slow_decay(htmc,5);//TOFF=5,TL=20=;HSTART=0=HED
 	// IHOLD_IRUN
 	TMC5160_Standstill_Current(htmc, 10);
 	TMC5160_Motor_Run_Current(htmc,31);
@@ -548,4 +545,4 @@ HAL_StatusTypeDef TMC5160_default_init_Bits_time(TMC5160_HandleTypeDef *htmc){
 	TMC5160_Upper_Velocity_For_StealthChop_Voltage_PWM_Mode(htmc, 500);
 	return HAL_OK;
 }
-*/
+

@@ -83,6 +83,69 @@ typedef enum{
 	LOST_STEPS		= 0x73, // R
 }TMC5160_Regs;
 
+typedef enum{
+	//GENERAL CONFIGURATION REGISTERS (0X00…0X0F)
+	//GCONF			= 0x00,	// RW
+	recalibrate_Mask				=	0x0,
+	faststandstill_Mask				=	0x2,
+	en_pwm_mode_Mask				=	0x4,
+	multistep_filt_Mask				=	0x8,
+	shaft_Mask						=	0x10,
+	//2if
+	diag0_error_Mask				=	0x20,
+	diag0_otpw_Mask					=	0x40,
+	diag0_stall_Mask				=	0x80,
+	diag0_step_Mask					=	0x80,
+	diag1_stall_Mask				=	0x100,
+	diag1_dir_Mask					=	0x100,
+	diag1_index_Mask				=	0x200,
+	diag1_onstate_Mask				=	0x400,
+	diag1_steps_skipped_Mask		=	0x800,
+	diag0_int_pushpull_Mask			=	0x1000,
+	diag1_poscomp_pushpull_Mask		=	0x2000,
+	small_hysteresis_Mask			=	0x4000,
+	stop_enable_Mask				=	0x8000,
+	direct_mode_Mask				=	0x10000,
+	test_mode_Mask					=	0x20000,
+	//CHOPCONF
+	TOFF_Mask						=	0xF,
+	TFD_Mask						=	0xF,
+	HSTRT_Mask						=	0x70,
+	HEND_Mask						=	0x780,
+	OFFSET_Mask						=	0x780,
+	fd3_Mask						=	0x800,
+	disfdcc_Mask					=	0x1000,
+	chm_Mask						=	0x4000,
+	TBL_Mask						=	0x18000,
+	vhighfs_Mask					=	0x40000,
+	vhighchm_Mask					=	0x80000,
+	TPFD_Mask						=	0xF00000,
+	MRES_Mask						=	0xF000000,
+	intpol_Mask						=	0x10000000,
+	dedge_Mask						=	0x20000000,
+	diss2g_Mask						=	0x40000000,
+	diss2vs_Mask					=	0x80000000,
+	//IHOLD_IRUN
+	IHOLD_Mask						=	0x40000,
+	IRUN_Mask						=	0x80000,
+	IHOLDDELAY_Mask					=	0xF00000,
+	//DRV_STATUS
+	SG_RESULT_Mask					=	0x3FF,
+	s2vsa_Mask						=	0x1000,
+	s2vsb_Mask						=	0x2000,
+	stealth_Mask					=	0x4000,
+	fsactive_Mask					=	0x8000,
+	CSACTUAL_Mask					=	0x1F0000,
+	StallGuard_Mask					=	0x1000000,
+	ot_Mask							=	0x2000000,
+	otpw_Mask						=	0x4000000,
+	s2ga_Mask						=	0x8000000,
+	s2gb_Mask						=	0x10000000,
+	ola_Mask						=	0x20000000,
+	olb_Mask						=	0x40000000,
+	stst_Mask						=	0x80000000,
+
+}TMC5160_Mask_of_Regs;
 //RampMode
 typedef enum  {
 	/* using all A, D and V parameters */
@@ -180,7 +243,7 @@ HAL_StatusTypeDef TMC5160_Control_The_upper_threshold_for_operation_with_CoolSte
 HAL_StatusTypeDef TMC5160_Hysteresis_For_Step_Frequency_Comparison(TMC5160_HandleTypeDef *htmc, uint32_t small_hysteresis);
 HAL_StatusTypeDef TMC5160_High_Velocity_Fullstep_Selection(TMC5160_HandleTypeDef *htmc, uint32_t vhighfs);
 HAL_StatusTypeDef TMC5160_High_Velocity_Chopper_Mode(TMC5160_HandleTypeDef *htmc, uint32_t vhighchm);
-HAL_StatusTypeDef TMC5160_StealthChop_Voltage_PWM_Enable_Flag(TMC5160_HandleTypeDef *htmc, uint32_t en_pwm_mod);
+HAL_StatusTypeDef TMC5160_StealthChop_Voltage_PWM_Enable_Flag(TMC5160_HandleTypeDef *htmc, uint32_t en_pwm_mode);
 
 // New all configuration BITS TIME
 HAL_StatusTypeDef TMC5160_Bits_Configuration(TMC5160_HandleTypeDef *htmc);
